@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuarios{
+  cpf Int @id @unique // @id indica PK
+  nome String 
+  data_nasc DateTime
+  senha Int 
+  telefone String
+  tipo String @default("comum")
+  emprestimos Emprestimos[]
+
+  @@map("usuarios")
+}
+
+model Emprestimos{
+  usuario_id Int
+  usuario Usuarios @relation(fields: [usuario_id], references: [cpf])
+  
+  livro_id Int
+  livro Livros @relation(fields: [livro_id], references: [id_livro])
+  
+  data_emprestimo DateTime @default(now())
+  data_devolucao_prevista DateTime
+  data_devolucao DateTime? @updatedAt
+
+  @@map("emprestimos")
+  @@id([usuario_id, livro_id])
+}
+
+model Livros{
+  id_livro Int @id @default(autoincrement()) 
+  titulo String @unique
+  autor String
+  editora String? // Interrogação não é obrigatório, mas pode adicionar depois 
+  ano_publicacao Int?
+  descricao String?
+  disponivel Boolean
+  emprestimos Emprestimos[]
+  categoria Categorias @relation(fields: [categoria_id], references: [id_categoria])
+  categoria_id Int
+  
+  @@map("livros") 
+}
+
+model Categorias{
+  id_categoria Int @id @default(autoincrement())
+  nome String @unique
+  livros Livros[]
+
+  @@map("categorias")
+}
+
+
