@@ -1,4 +1,4 @@
-import Categoria_Model from "./Categoria_Model.js";
+import Categoria_Model from "../model/Categoria_Model.js";
 
 class Categoria_Controller {
    

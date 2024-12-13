@@ -1,68 +1,68 @@
-import Usuario_Model from "./Usuario_Model.js";
+import Usuario_Model from "../model/Usuario_Model.js";
 
 class Usuario_Controller {
 
     //Direcionar para a página de login GET
     async login(req, res){
-        res.sendFile("login.html", { root: process.cwd() });
+        res.sendFile("/login.html", { root: process.cwd() });
     }
 
     //Direcionar para a página de erro (Usuario ou senha incorreto)
     async erro(req,res){
-        res.sendFile("erro.html", { root: process.cwd() });
+        res.sendFile("/erro.html", { root: process.cwd() });
     }
 
     //Direcionar para a página de usuário comum
     async principal_userC(req, res){
-        res.sendFile("principal_useC.html", { root: process.cwd() });
+        res.sendFile("/principal_userC.html", { root: process.cwd() });
     }
 
+    //Direcionar para a página do bibliotecário
     async principal_userF(req, res){
-        res.sendFile("principal_func.html", { root: process.cwd() });
-    }
+        res.sendFile("/principal_func.html", { root: process.cwd() });
+    }  
 
-    async home(req, res){
-        res.sendFile("home.html", { root: process.cwd() });
-    }
+    //Verificar se é usuario ADM/Secretário
+    async verificar_usuario_biblio(req, res){
+        const usuario = await Usuario_Model.busca_por_cpf(Number(req.body.cpf));
+        const tipo = String(usuario.tipo);
 
+        if(tipo != "comum"){
+            return ("s")
+        }else if(tipo == "comum"){
+            return ("n")
+        }else{
+            return ("nulo")
+        }
+    }
     //Autenticar login
     async autenticar_login(req, res, next){
         const cpf = Number(req.body.cpf);
-        const senha = req.body.senha;
+        const senha = String(req.body.senha);
 
         const usuario = await Usuario_Model.busca_por_cpf(cpf);
         
         if(!usuario)
-            throw new error("Usuário não encontrado");
-            //return res.redirect("/erro");
+            //throw new error("Usuário não encontrado");
+            return res.redirect("/erro");
 
         if(senha != usuario.senha)
-            throw new error("Senha incorreta");
-            //return res.redirect("/erro");
+            //throw new error("Senha incorreta");
+            return res.redirect("/erro");
 
         req.session.logado = true;
-        res.redirect(next());
-    }
-    
-    //Verificar se está logado
-    async verificar_login(req, res, next){
-        if(req.session.logado){
-            next();
+        req.session.tipo = usuario.tipo;
+
+        if(usuario.tipo != "comum"){
+           return res.redirect("/principal_userF");
+
         }else{
-            return res.redirect("/login");
+            return res.redirect("/principal_userC");
+
         }
     }
 
-    //Verificar se é usuario ADM/Secretário
-    async verificar_tipo_usuario(req, res){
-        const tipo = req.body.tipo;
 
-        if(tipo != "comum"){
-            res.redirect("/principal_userF")
-        }else{
-            res.redirect("/principal_userC")
-        }
-    }
 
     //De acordo com a requisição responde com os dados usuarios em json usando o model
     async exibir(req,res) {

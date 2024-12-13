@@ -7,15 +7,16 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    
     <div class="tela_login">
-        <form action="http://localhost:3000/login" method="post"><!--defenir rota-->
+        <form action="http://localhost:3000/login" method="POST"><!--defenir rota-->
             <h1 id="title">Portal do Saber</h1>
             <h3>Login</h3>
             <input type="number" name="cpf" placeholder="CPF" class="login" id="cpf" required>
             <br><br>
             <input type="password" name="senha" placeholder="Senha" class="login" id="senha" required>
             <br><br>
-            <button id="btn_login">Acessar</button><!--esta se encaminhando pelo link de baixo, razão, não sei, sugiro mudar de botão para tag a, mas é dificil de ajustar-->
+            <button type="submit" id="btn_login">Acessar</button><!--esta se encaminhando pelo link de baixo, razão, não sei, sugiro mudar de botão para tag a, mas é dificil de ajustar-->
             <!--Esse botão deve direcionar para a página principal do user-->
         </form>
         <!--<a href="principal_userC.html" id="caminho">Seguir para a página inicial</a>-->

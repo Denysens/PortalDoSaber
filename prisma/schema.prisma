@@ -13,54 +13,55 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Usuarios{
-  cpf Int @id @unique // @id indica PK
-  nome String 
-  data_nasc DateTime
-  senha Int 
-  telefone String
-  tipo String @default("comum")
+model Usuarios {
+  cpf         Int           @id @unique // @id indica PK
+  nome        String
+  data_nasc   DateTime
+  senha       Int
+  telefone    String
+  tipo        String        @default("comum")
+
+  
   emprestimos Emprestimos[]
 
   @@map("usuarios")
 }
 
-model Emprestimos{
-  usuario_id Int
-  usuario Usuarios @relation(fields: [usuario_id], references: [cpf])
-  
-  livro_id Int
-  livro Livros @relation(fields: [livro_id], references: [id_livro])
-  
-  data_emprestimo DateTime @default(now())
+model Emprestimos {
+  id_emprestimo           Int       @id @default(autoincrement())
+  usuario_id              Int
+  livro_id                Int
+  data_emprestimo         DateTime  @default(now())
   data_devolucao_prevista DateTime
-  data_devolucao DateTime? @updatedAt
+  ativo                   Boolean   @default(true)
+  data_devolucao          DateTime? @updatedAt()
+
+  Usuarios Usuarios @relation(fields: [usuario_id], references: [cpf])
+  Livros   Livros   @relation(fields: [livro_id], references: [id_livro])
 
   @@map("emprestimos")
-  @@id([usuario_id, livro_id])
 }
 
-model Livros{
-  id_livro Int @id @default(autoincrement()) 
-  titulo String @unique
-  autor String
-  editora String? // Interrogação não é obrigatório, mas pode adicionar depois 
+model Livros {
+  id_livro       Int           @id @default(autoincrement())
+  titulo         String        @unique
+  autor          String
+  editora        String?
   ano_publicacao Int?
-  descricao String?
-  disponivel Boolean
-  emprestimos Emprestimos[]
-  categoria Categorias @relation(fields: [categoria_id], references: [id_categoria])
-  categoria_id Int
-  
-  @@map("livros") 
+  descricao      String?
+  disponivel     Boolean
+  emprestimos    Emprestimos[]
+  categoria_id   Int
+
+  categoria      Categorias    @relation(fields: [categoria_id], references: [id_categoria])
+
+  @@map("livros")
 }
 
-model Categorias{
-  id_categoria Int @id @default(autoincrement())
-  nome String @unique
-  livros Livros[]
+model Categorias {
+  id_categoria Int      @id @default(autoincrement())
+  nome         String   @unique
+  livros       Livros[]
 
   @@map("categorias")
 }
-
-
