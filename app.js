@@ -12,10 +12,10 @@ app.use(cors());
 //Veja o corpo de requisições como um json
 app.use(express.json());
 
-app.use('/public', express.static(process.cwd() + "/public"));
-
-//VERIFICAR O QUE ISSO FAZ 
+//Permite a leitura dos dados 
 app.use(express.urlencoded({ extended: true }));
+
+app.use('/public', express.static(process.cwd() + "/public"));
 
 //Middleware de sessão - Express session
 app.use(session({
@@ -25,18 +25,17 @@ app.use(session({
     cookie: {}
 }));
 
-//Envia para a página / o arq login.html, se este estiver na mesma pasta das demais (process.cwd)
-app.get('/', (req, res) => {
-    res.sendFile("./src/views/login.html", { root: process.cwd() });
-});
-
-//VERIFICAR ISSO AQUI TAMBÉM
 app.use(router);
 
+//Envia para a página / o arq login.html, se este estiver na mesma pasta das demais (process.cwd)
+app.get('/', (req, res) => {
+    res.sendFile("./src/teste/login.html", { root: process.cwd() });
+});
+
 //app.use(errorHandler)
-//é como um midle goblal, todos passam por ele
-app.use((req, res, next) => {
-    console.log(error);
+//É como um midle goblal, todos passam por ele
+app.use((err, req, res, next) => {
+    console.log(err.message);
     res.status(500).send({ error: "Erro interno" });
 })
 

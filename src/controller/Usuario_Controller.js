@@ -4,12 +4,12 @@ class Usuario_Controller {
 
     //Direcionar para a página de login - (GET e erros ao logar)
     async login(req, res) {
-        res.sendFile("../../login.html", { root: process.cwd() });
+        res.sendFile("./src/views/login.html", { root: process.cwd() });
     }
 
     //Direcionar para a página de usuário comum
     async principal_userC(req, res) {
-        res.sendFile("../../principal_userC.html", { root: process.cwd() });
+        res.sendFile("./src/views/principal_userC.html", { root: process.cwd() });
     }
 
     //Direcionar para a página do bibliotecário/ funcionnário
@@ -19,7 +19,6 @@ class Usuario_Controller {
 
     //Autenticar login
     async autenticar_login(req, res) {
-
         const cpf = req.body.cpf;
         const senha = req.body.senha;
 
@@ -27,12 +26,11 @@ class Usuario_Controller {
 
         if (!usuario) {
             //throw new error("Usuário não encontrado");
-            return res.redirect("/login");
+            return res.redirect("login");
         }
         if (senha != usuario.senha) {
             //throw new error("Senha incorreta");
-            return res.redirect("/login");
-
+            return res.redirect("login");
         }
 
         req.session.logado = true;
