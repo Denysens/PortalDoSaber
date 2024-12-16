@@ -1,9 +1,6 @@
 import 'express-async-errors'; //serve para tratar os erros sícronos e assícronos 
 import express from "express";
-import usuario_router from "./src/routers/Usuario_Router.js";
-import livro_router from './src/routers/Livro_Router.js';
-import categoria_router from './src/routers/Categoria_Router.js';
-import emprestimo_router from './src/routers/Emprestimo_Router.js';
+import router from './src/routers/index.js';
 import cors from "cors";
 import session from 'express-session';
 import { Cookie } from "express-session";
@@ -25,21 +22,21 @@ app.use(session({
     secret: "fjkfkjshfjk",
     resave: false,
     saveUninitialized: true,
-    Cookie: {}
+    cookie: {}
 }));
 
-//Envia para a página / o arq index.html, se este estiver na mesma pasta das demais (process.cwd)
+//Envia para a página / o arq login.html, se este estiver na mesma pasta das demais (process.cwd)
 app.get('/', (req, res) => {
-    res.sendFile("index.html", { root: process.cwd() });
+    res.sendFile("login.html", { root: process.cwd() });
 });
 
 //VERIFICAR ISSO AQUI TAMBÉM
-app.use(usuario_router, livro_router, categoria_router, emprestimo_router);
+app.use(router);
 
 //app.use(errorHandler)
 //é como um midle goblal, todos passam por ele
-app.use((err, req, res, next)=>{
-    console.log(err.message);
+app.use(( req, res, next)=>{
+    console.log(error);
     res.status(500).send({error: "Erro interno"});
 })
 

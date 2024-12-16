@@ -2,90 +2,70 @@ import Usuario_Model from "../model/Usuario_Model.js";
 
 class Usuario_Controller {
 
-    //Direcionar para a página de login GET
-    async login(req, res){
-        res.sendFile("/login.html", { root: process.cwd() });
-    }
-
-    //Direcionar para a página de erro (Usuario ou senha incorreto)
-    async erro(req,res){
-        res.sendFile("/erro.html", { root: process.cwd() });
+    //Direcionar para a página de login - (GET e erros ao logar)
+    async login(req, res) {
+        res.sendFile("../../login.html", { root: process.cwd() });
     }
 
     //Direcionar para a página de usuário comum
-    async principal_userC(req, res){
-        res.sendFile("/principal_userC.html", { root: process.cwd() });
+    async principal_userC(req, res) {
+        res.sendFile("../../principal_userC.html", { root: process.cwd() });
     }
 
-    //Direcionar para a página do bibliotecário
-    async principal_userF(req, res){
-        res.sendFile("/principal_func.html", { root: process.cwd() });
-    }  
-
-    //Verificar se é usuario ADM/Secretário
-    async verificar_usuario_biblio(req, res){
-        const usuario = await Usuario_Model.busca_por_cpf(Number(req.body.cpf));
-        const tipo = String(usuario.tipo);
-
-        if(tipo != "comum"){
-            return ("s")
-        }else if(tipo == "comum"){
-            return ("n")
-        }else{
-            return ("nulo")
-        }
+    //Direcionar para a página do bibliotecário/ funcionnário
+    async principal_userF(req, res) {
+        res.sendFile("../../principal_userF.html", { root: process.cwd() });
     }
+
     //Autenticar login
-    async autenticar_login(req, res, next){
-        const cpf = Number(req.body.cpf);
-        const senha = String(req.body.senha);
+    async autenticar_login(req, res, next) {
+        const cpf = req.body.cpf;
+        const senha = req.body.senha;
 
         const usuario = await Usuario_Model.busca_por_cpf(cpf);
-        
-        if(!usuario)
-            //throw new error("Usuário não encontrado");
-            return res.redirect("/erro");
 
-        if(senha != usuario.senha)
+        if (!usuario)
+            //throw new error("Usuário não encontrado");
+            return res.redirect("/login");
+
+        if (senha != usuario.senha)
             //throw new error("Senha incorreta");
-            return res.redirect("/erro");
+            return res.redirect("/login");
 
         req.session.logado = true;
         req.session.tipo = usuario.tipo;
 
-        if(usuario.tipo != "comum"){
-           return res.redirect("/principal_userF");
+        if (usuario.tipo == "func") {
+            return res.redirect("/principal_userF");
 
-        }else{
+        } else {
             return res.redirect("/principal_userC");
-
         }
     }
 
-
-
     //De acordo com a requisição responde com os dados usuarios em json usando o model
-    async exibir(req,res) {
+    async exibir(req, res) {
         const usuarios = await Usuario_Model.busca();
         res.json(usuarios);
     }
 
     //Exibir o usuario de acordo com a pesquisa por cpf
-    async exibir_por_cpf(req, res){
+    async exibir_por_cpf(req, res) {
         const cpf = req.body.cpf;
         const usuario = await Usuario_Model.busca_por_cpf(cpf);
         res.json(usuario);
     }
 
     //Exibir usuarios por nome
-    async exibir_por_nome(req,res){
+/*    async exibir_por_nome(req, res) {
         const nome = req.body.nome;
-        const usuarios = await Usuario_Model.busca_por_nome(nome);
+        const ativo = req.body.ativo;
+        const usuarios = await Usuario_Model.busca_por_nome({ nome, ativo });
         res.json(usuarios);
-    }
+    }*/
 
     //Cadastra o usuario 
-    async cadastar(req, res){
+    async cadastar(req, res) {
         const cpf = req.body.cpf;
         const nome = req.body.nome;
         const data_nasc = req.body.data_nasc;
@@ -102,30 +82,26 @@ class Usuario_Controller {
         }catch (error){
             res.status(500).json({erro: 'Erro ao cadastar o usuario.'});
         }*/
-        const usuario = await Usuario_Model.adicionar({cpf, nome, data_nasc, senha, telefone, tipo});
-        console.log(usuario);
-        res.json({message: "Usuario cadastrado"})
+        const usuario = await Usuario_Model.adicionar({ cpf, nome, data_nasc, senha, telefone, tipo });
+        res.json({ message: "Usuario cadastrado" })
     }
 
-    //Atualizar estado do usuario (empréstimo)
-    async atualizar(req, res){
+    //Atualizar dados do usuario ativo
+    async atualizar(req, res) {
         const cpf = req.body.cpf;
-        const nome = req.body.nome;
-        const data_nasc = req.body.data_nasc;
         const senha = req.body.senha;
         const telefone = req.body.telefone;
-        const tipo = req.body.tipo;
 
-        const usuario = await Usuario_Model.atualizar({cpf, nome, data_nasc,senha, telefone, tipo});
-        res.json({message: "Atualizado o usuario"});
+        const usuario = await Usuario_Model.atualizar({ cpf, senha, telefone});
+        res.json({ message: "Usuario atualizado" });
     }
 
     //Excluir usuario
-    async deletar(req, res){
+    async deletar(req, res) {
         const cpf = req.body.cpf;
-        const usuario = await Usuario_Model.deletar({cpf});
-        console.log(usuario);
-        res.json({message: "Usuario deletado com sucesso"});
+        const ativo = false;
+        const usuario = await Usuario_Model.ativar_desativar({ cpf, ativo });
+        res.json({ message: "Usuario deletado" });
     }
 }
 

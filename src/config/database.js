@@ -1,5 +1,5 @@
-//NÃO IRÁ PRECISAR MAIS !!!
-import pkg from 'pg';
+    //Não precisa mais
+    // import pkg from 'pg';
 const { Pool } = pkg;
 
 class Database{
@@ -13,7 +13,7 @@ class Database{
         });
     }
 
-    async consultar(sql, params = []) {
+    /*async consultar(sql, params = []) {
         const cliente = await this.pool.connect();
         try {
             const resultado = await cliente.consultar(sql, params);
@@ -24,7 +24,7 @@ class Database{
         }finally {
             cliente.release();
         }
-    }
+    }*/
 }
 
 export default Database;

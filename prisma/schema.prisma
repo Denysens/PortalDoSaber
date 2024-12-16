@@ -14,14 +14,14 @@ datasource db {
 }
 
 model Usuarios {
-  cpf         Int           @id @unique // @id indica PK
-  nome        String
-  data_nasc   DateTime
-  senha       Int
-  telefone    String
-  tipo        String        @default("comum")
+  cpf       Int      @id @unique // @id indica PK
+  nome      String
+  data_nasc DateTime
+  senha     Int
+  telefone  String
+  tipo      String   @default("comum")
+  ativo     Boolean  @default(true)
 
-  
   emprestimos Emprestimos[]
 
   @@map("usuarios")
@@ -33,8 +33,8 @@ model Emprestimos {
   livro_id                Int
   data_emprestimo         DateTime  @default(now())
   data_devolucao_prevista DateTime
-  ativo                   Boolean   @default(true)
   data_devolucao          DateTime? @updatedAt()
+  ativo                   Boolean   @default(true)
 
   Usuarios Usuarios @relation(fields: [usuario_id], references: [cpf])
   Livros   Livros   @relation(fields: [livro_id], references: [id_livro])
@@ -44,23 +44,24 @@ model Emprestimos {
 
 model Livros {
   id_livro       Int           @id @default(autoincrement())
-  titulo         String        @unique
+  titulo         String
   autor          String
   editora        String?
   ano_publicacao Int?
   descricao      String?
-  disponivel     Boolean
+  disponivel     Boolean       @default(true)
   emprestimos    Emprestimos[]
   categoria_id   Int
+  ativo          Boolean       @default(true)
 
-  categoria      Categorias    @relation(fields: [categoria_id], references: [id_categoria])
+  categoria Categorias @relation(fields: [categoria_id], references: [id_categoria])
 
   @@map("livros")
 }
 
 model Categorias {
   id_categoria Int      @id @default(autoincrement())
-  nome         String   @unique
+  nome         String
   livros       Livros[]
 
   @@map("categorias")

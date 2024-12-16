@@ -1,30 +1,29 @@
 import Categoria_Model from "../model/Categoria_Model.js";
 
 class Categoria_Controller {
-   
+
     //De acordo com a requisição responde com os dados categorias em json usando o model
-    async exibir(req,res) {
-        const categorias = await Categoria_Model.busca();
+    async exibir(req, res) {
+        const categorias = await Categoria_Model.buscar();
         res.json(categorias);
     }
 
     //Exibir o categoria de acordo com a pesquisa por id_categoria
-    async exibir_por_id(req, res){
+    async exibir_por_id(req, res) {
         const id = req.params.id_categoria;
-        const categoria = await Categoria_Model.busca_por_id(id);
+        const categoria = await Categoria_Model.buscar_por_id(id);
         res.json(categoria);
     }
 
     //Exibir categorias por nome
-    async exibir_por_nome(req,res){
-        const id = req.params.id_categoria;
+    async exibir_por_nome(req, res) {
         const nome = req.body.nome;
-        const categorias = await Categoria_Model.busca_por_nome({id, nome});
+        const categorias = await Categoria_Model.buscar_por_nome(nome);
         res.json(categorias);
     }
 
     //Cadastra o categoria 
-    async cadastar(req, res){
+    async cadastar(req, res) {
         const nome = req.body.nome;
 
         /*if(!nome ){
@@ -37,25 +36,15 @@ class Categoria_Controller {
             res.status(500).json({erro: 'Erro ao cadastar o categoria.'});
         }*/
 
-        const categoria = await Categoria_Model.adicionar({nome});
-        console.log(categoria);
-        res.json(categoria)
-    }
-
-    //Atualizar categoria
-    async atualizar(req, res){
-        const id = req.params.id;
-        const nome = req.body.nome;
-
-        const categoria = await Categoria_Model.atualizar({id, nome});
-        res.json({message: "Atualizado o estado de empréstimo"});
+        const categoria = await Categoria_Model.adicionar({ nome });
+        res.json({ message: "Categoria cadastrada" })
     }
 
     //Excluir categoria
-    async deletar(req, res){
+    async deletar(req, res) {
         const id = req.params.id;
-        const categoria = await Categoria_Model.deletar({id});
-        res.json({message: "Categoria deletado com sucesso"});
+        const categoria = await Categoria_Model.deletar({ id });
+        res.json({ message: "Categoria deletada" });
     }
 }
 
