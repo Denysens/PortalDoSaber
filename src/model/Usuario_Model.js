@@ -15,7 +15,7 @@ class Usuario_Model {
 
     //Pesquisa o usuario pelo CPF
     async busca_por_cpf(cpf) {
-        const usuario_buscado = await prisma.usuarios.findMany({
+        const usuario_buscado = await prisma.usuarios.findUnique({
             where: {
                 cpf: Number(cpf)
             }

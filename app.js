@@ -12,7 +12,7 @@ app.use(cors());
 //Veja o corpo de requisições como um json
 app.use(express.json());
 
-app.use('/public', express.static(process.cwd() + "/img"));
+app.use('/public', express.static(process.cwd() + "/public"));
 
 //VERIFICAR O QUE ISSO FAZ 
 app.use(express.urlencoded({ extended: true }));
@@ -27,7 +27,7 @@ app.use(session({
 
 //Envia para a página / o arq login.html, se este estiver na mesma pasta das demais (process.cwd)
 app.get('/', (req, res) => {
-    res.sendFile("login.html", { root: process.cwd() });
+    res.sendFile("./src/views/login.html", { root: process.cwd() });
 });
 
 //VERIFICAR ISSO AQUI TAMBÉM
@@ -35,9 +35,9 @@ app.use(router);
 
 //app.use(errorHandler)
 //é como um midle goblal, todos passam por ele
-app.use(( req, res, next)=>{
+app.use((req, res, next) => {
     console.log(error);
-    res.status(500).send({error: "Erro interno"});
+    res.status(500).send({ error: "Erro interno" });
 })
 
 //Escute a porta 3000 (servidor na minha máquina, localhost)

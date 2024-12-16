@@ -27,21 +27,23 @@ class Livro_Model {
     }
 
     //Pesquisa o livro por id
-    async buscar_por_id(id) {
-        const livro_buscado = await prisma.livros.findUnique({
-            where:
-                { id_livro: Number(id) },
+    async buscar_por_id(livro) {
+        const livro_buscado = await prisma.livros.findMany({
+            where: {
+                AND: [
+                    { id_livro: Number(livro.id) },
+                    { ativo: livro.ativo }
+                ]
+            }
         })
         return livro_buscado;
     }
 
     //Pesquisa o livro pelo nome 
-    async buscar_por_titulo(livro) {
+    /*async buscar_por_titulo(livro) {
         const livro_buscado = await prisma.livros.findMany({
             where: {
                 AND: [
-                    { id_livro: Number(livro.id) },
-
                     {
                         titulo: {
                             contains: String(livro.titulo),
@@ -52,19 +54,19 @@ class Livro_Model {
             }
         });
         return livro_buscado;
-    }
+    }*/
 
     //Insere um novo livro
     async adicionar(livro) {
+        console.log(livro)
         const novo_livro = await prisma.livros.create({
             data: {
                 titulo: livro.titulo,
                 autor: livro.autor,
                 editora: livro.editora,
-                ano_publicacao: livro.ano_publicacao,
+                ano_publicacao: Number(livro.ano_publicacao),
                 descricao: livro.descricao,
-                disponivel: livro.disponivel,
-                categoria_id: livro.categoria_id,
+                categoria_id: Number(livro.categoria_id),
             },
         });
         console.log(novo_livro);
@@ -73,7 +75,7 @@ class Livro_Model {
 
     //Atualizar o estado de empréstimo do livro
     async atualizar(livro) {
-        const livro_atualizado = await prisma.livros.update({
+        const livro_atualizado = await prisma.livros.updateMany({
             where: {
                 AND: [
                     { id_livro: Number(livro.id) },

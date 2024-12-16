@@ -11,27 +11,26 @@ class Livro_Controller {
     //Exibir os livros por categoria
     async exibir_por_categoria(req, res) {
         const id_categoria = req.body.id_categoria;
-        const ativo = true;
+        const ativo = req.body.ativo;
         const livros = await Livro_Model.buscar_por_categoria({ id_categoria, ativo });
         res.json(livros);
     }
 
     //Exibir o livro de acordo com a pesquisa por id 
     async exibir_por_id(req, res) {
-        const id = req.params.id_livro;
+        const id = req.params.id;
         const ativo = req.body.ativo;
         const livro = await Livro_Model.buscar_por_id({ id, ativo });
         res.json(livro);
     }
 
     //Exibir livros por nome
-    async exibir_por_titulo(req, res) {
-        const id = req.params.id;
+    /*async exibir_por_titulo(req, res) {
         const titulo = req.body.titulo;
         const ativo = req.body.ativo;
-        const livros = await Livro_Model.buscar_por_titulo({ id, titulo, ativo });
+        const livros = await Livro_Model.buscar_por_titulo({ titulo, ativo });
         res.json(livros);
-    }
+    }*/
 
     //Cadastra o livro 
     async cadastar(req, res) {
@@ -40,8 +39,7 @@ class Livro_Controller {
         const editora = req.body.editora;
         const ano_publicacao = req.body.ano_publicacao;
         const descricao = req.body.descricao;
-        const disponivel = req.body.disponivel;
-        const categoria_id = req.body.categoria_id;
+        const categoria_id = req.body.categoria;
 
         /*if(!titulo || !autor){
             return res.status(400).json({erro: 'Campos obrigatórios estão ausentes'});// status 400, erro por parte do cliente
@@ -51,7 +49,7 @@ class Livro_Controller {
         }catch (error){
             res.status(500).json({erro: 'Erro ao cadastar o livro.'});
         }*/
-        const livro = await Livro_Model.adicionar({ titulo, autor, editora, ano_publicacao, descricao, disponivel, categoria_id });
+        const livro = await Livro_Model.adicionar({ titulo, autor, editora, ano_publicacao, descricao, categoria_id });
         res.json({ message: "Livro cadastrado" })
     }
 
@@ -59,9 +57,8 @@ class Livro_Controller {
     async atualizar_emprestimo(req, res) {
         const id = req.params.id;
         const disponivel = req.body.disponivel;
-        const ativo = true; //só pode emprestar ou receber se o livro estiver ativo para essa função
+        const ativo = req.body.ativo; //só pode emprestar ou receber se o livro estiver ativo para essa função
         const livro = await Livro_Model.atualizar({ id, disponivel, ativo });
-        console.log(livro);
         res.json({ message: "Empréstimo aualizado" });
     }
 

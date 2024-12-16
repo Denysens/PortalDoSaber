@@ -20,7 +20,7 @@ class Categoria_Model {
     }
 
     //Pesquisa o categoria pelo nome 
-    async buscar_por_nome(nome) {
+    /*async buscar_por_nome(nome) {
         const categoria = await prisma.categorias.findMany({
             where: {
                 nome: {
@@ -30,7 +30,7 @@ class Categoria_Model {
             },
         })
         return categoria;
-    }
+    }*/
 
     //Insere um novo categoria
     async adicionar(categoria) {
@@ -40,16 +40,6 @@ class Categoria_Model {
             },
         });
         return nova_categoria
-    }
-
-    //Deletar um categoria
-    async deletar(categoria) {
-        const categoria_deletada = await prisma.categorias.delete({
-            where: {
-                id_categoria: Number(categoria.id),
-            },
-        })
-        return categoria_deletada
     }
 }
 

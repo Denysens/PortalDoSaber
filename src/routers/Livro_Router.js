@@ -8,9 +8,9 @@ livro_router.get('/livros', Livro_Controller.exibir);
 
 livro_router.get('/livros/categoria', Livro_Controller.exibir_por_categoria);
 
-livro_router.get('/livros/:id_livro', Livro_Controller.exibir_por_id);
+livro_router.get('/livros/:id', Livro_Controller.exibir_por_id);
 
-livro_router.get('/livros/titulo/:id', Livro_Controller.exibir_por_titulo)
+//livro_router.get('/livros/titulo', Livro_Controller.exibir_por_titulo);
 
 livro_router.post('/livros', Livro_Controller.cadastar); //verificar_login
 

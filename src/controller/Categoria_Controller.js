@@ -16,11 +16,11 @@ class Categoria_Controller {
     }
 
     //Exibir categorias por nome
-    async exibir_por_nome(req, res) {
+    /*async exibir_por_nome(req, res) {
         const nome = req.body.nome;
         const categorias = await Categoria_Model.buscar_por_nome(nome);
         res.json(categorias);
-    }
+    }*/
 
     //Cadastra o categoria 
     async cadastar(req, res) {
@@ -40,12 +40,6 @@ class Categoria_Controller {
         res.json({ message: "Categoria cadastrada" })
     }
 
-    //Excluir categoria
-    async deletar(req, res) {
-        const id = req.params.id;
-        const categoria = await Categoria_Model.deletar({ id });
-        res.json({ message: "Categoria deletada" });
-    }
 }
 
 export default new Categoria_Controller();

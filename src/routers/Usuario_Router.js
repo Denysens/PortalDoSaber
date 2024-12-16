@@ -9,8 +9,8 @@ const usuario_router = Router();
 usuario_router.get('/login', Usuario_Controller.login);
 usuario_router.post('/login', Usuario_Controller.autenticar_login);
 
-usuario_router.get('/principal_userC', Usuario_Controller.principal_userC);
-usuario_router.get('/principal_userF', Usuario_Controller.principal_userF);
+usuario_router.get('/principal_userC', auth, Usuario_Controller.principal_userC);
+usuario_router.get('/principal_userF', verificar_login, Usuario_Controller.principal_userF);
 
 usuario_router.get('/usuarios', Usuario_Controller.exibir); //verificar_login
 

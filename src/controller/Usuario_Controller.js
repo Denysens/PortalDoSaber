@@ -14,32 +14,35 @@ class Usuario_Controller {
 
     //Direcionar para a página do bibliotecário/ funcionnário
     async principal_userF(req, res) {
-        res.sendFile("../../principal_userF.html", { root: process.cwd() });
+        res.sendFile("./src/views/principal_userF.html", { root: process.cwd() });
     }
 
     //Autenticar login
-    async autenticar_login(req, res, next) {
+    async autenticar_login(req, res) {
+
         const cpf = req.body.cpf;
         const senha = req.body.senha;
 
         const usuario = await Usuario_Model.busca_por_cpf(cpf);
 
-        if (!usuario)
+        if (!usuario) {
             //throw new error("Usuário não encontrado");
             return res.redirect("/login");
-
-        if (senha != usuario.senha)
+        }
+        if (senha != usuario.senha) {
             //throw new error("Senha incorreta");
             return res.redirect("/login");
+
+        }
 
         req.session.logado = true;
         req.session.tipo = usuario.tipo;
 
         if (usuario.tipo == "func") {
-            return res.redirect("/principal_userF");
+            return res.redirect("principal_userF");
 
         } else {
-            return res.redirect("/principal_userC");
+            return res.redirect("principal_userC");
         }
     }
 
@@ -57,12 +60,12 @@ class Usuario_Controller {
     }
 
     //Exibir usuarios por nome
-/*    async exibir_por_nome(req, res) {
-        const nome = req.body.nome;
-        const ativo = req.body.ativo;
-        const usuarios = await Usuario_Model.busca_por_nome({ nome, ativo });
-        res.json(usuarios);
-    }*/
+    /*    async exibir_por_nome(req, res) {
+            const nome = req.body.nome;
+            const ativo = req.body.ativo;
+            const usuarios = await Usuario_Model.busca_por_nome({ nome, ativo });
+            res.json(usuarios);
+        }*/
 
     //Cadastra o usuario 
     async cadastar(req, res) {
@@ -92,7 +95,7 @@ class Usuario_Controller {
         const senha = req.body.senha;
         const telefone = req.body.telefone;
 
-        const usuario = await Usuario_Model.atualizar({ cpf, senha, telefone});
+        const usuario = await Usuario_Model.atualizar({ cpf, senha, telefone });
         res.json({ message: "Usuario atualizado" });
     }
 

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal do Saber - Conf. Usuários</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../../style.css">
     <script src="card.js"></script>
     <style>
         
@@ -152,8 +152,8 @@
                                 <input type="text" id="telefone" class="form-control" placeholder="Telefone" name="telefone">
                             </div>
                             <div class="mb-3">
-                                <label class="visually-hidden" for="autoSizingSelect">Tipo: </label>
-                                <select class="form-select" id="autoSizingSelect" name="tipo" id="tipo">
+                                <label class="form-label" for="tipo">Tipo: </label>
+                                <select class="form-select" id="tipo" name="tipo">
                                     <option value="comum">Comum</option>
                                     <option value="funcionario">Funcionário</option>
                                 </select>
@@ -171,21 +171,28 @@
     </div>  
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-    <script src="menu.js"></script>
+    <script src="../../menu.js"></script>
     <script>
+        const base_url = "http://localhost:3000/usuarios";
+
         //Solicitação Get
-        fetch('http://localhost:3000/usuarios')
+        fetch(`${base_url}`)
             .then(response => response.json())
             .then(json => renderizar_usuarios(json));
 
-        //Solicitação Get com ID
-        fetch('http://localhost:3000/usuarios/1')
+        //Solicitação Get por cpf
+        fetch(`${base_url}/cpf`)
+            .then(response => response.json())
+            .then(json => renderizar_usuarios(json));
+
+        //Solicitação Get por nome        
+        fetch(`${base_url}/nome`)
             .then(response => response.json())
             .then(json => renderizar_usuarios(json));
 
         function preencher_modal_atualizar(cpf) {
             // Buscar os dados do usuário pelo CPF 
-            fetch(`http://localhost:3000/usuarios/${cpf}`)
+            fetch(`${base_url}/${cpf}`)
                 .then(response => response.json())
                 .then(usuario => {
                     // Preencher os campos do modal com os dados do usuário
@@ -211,28 +218,15 @@
         //Solicitação POST
         function salvar_usuario() {
             const nome = document.getElementById('nome').value;
-            console.log(nome);
             const cpf = document.getElementById('cpf').value;
-            console.log(cpf);
             const data_nasc = document.getElementById('data_nasc').value;
-            console.log(data_nasc);
             const telefone = document.getElementById('telefone').value;
-            console.log(telefone);
             const senha = document.getElementById('senha').value;
-            console.log(senha);
             const tipo = document.getElementById('tipo');
-            console.log(tipo);
 
-            fetch('http://localhost:3000/usuarios', {
+            fetch(`${base_url}`, {
                 method: 'POST',
-                body: JSON.stringify({
-                    nome,
-                    cpf,
-                    data_nasc,
-                    telefone,
-                    senha,
-                    tipo
-                }),
+                body: JSON.stringify({nome, cpf, data_nasc, telefone, senha, tipo}),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -247,7 +241,7 @@
             const telefone = document.getElementById('modal-telefone').value;
             const cpf = document.getElementById('modal-cpf').value;
 
-            fetch('http://localhost:3000/usuarios' + cpf, {
+            fetch(`${base_url}`, {
                 method: 'PUT',
                 body: JSON.stringify({
                     senha,
@@ -264,8 +258,8 @@
                     // Fechar o modal e atualizar a página
                     const modal = bootstrap.Modal.getInstance(document.getElementById('modal_atualizar'));
                     modal.hide();
-                    // Aqui você pode recarregar ou atualizar os cards com a lista de usuários
-                    fetch_usuarios(); // Ou qualquer função que você use para atualizar os cards
+                    // Atualiza os cards com a lista de usuários
+                    fetch_usuarios(); 
                 }
             })
             .catch(error => console.error('Erro ao atualizar usuário:', error));
@@ -275,7 +269,7 @@
         function deletar_usuarios() {
             const cpf = document.getElementById('modal-deletar-cpf').textContent;
 
-            fetch('http://localhost:3000/usuarios', {
+            fetch(`${base_url}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -296,7 +290,7 @@
 
         // Função para buscar os usuários e renderizar os cartões
         function fetch_usuarios() {
-            fetch('http://localhost:3000/usuarios')
+            fetch(`${base_url}`)
                 .then(response => response.json())
                 .then(json => renderizar_usuarios(json))  // Passa os dados para renderizar_usuarios
                 .catch(error => {
@@ -344,25 +338,25 @@
                     telefone.classList.add('card-text');
 
                     // Adicionando os links de atualização e remoção
-                    const link_atualizar = document.createElement('a');
-                    link_atualizar.href = '#';
-                    link_atualizar.classList.add('btn', 'btn-warning', 'btn-sm');
-                    link_atualizar.textContent = '<i class="bi bi-person-fill-gear"></i>';
-                    link_atualizar.setAttribute('data-bs-toggle', 'modal');
-                    link_atualizar.setAttribute('data-bs-target', `#modal_atualizar-${usuario.cpf}`);
-                    link_atualizar.onclick = () => {
+                    const link_atualizar_usuario = document.createElement('a');
+                    link_atualizar_usuario.href = '#';
+                    link_atualizar_usuario.classList.add('btn', 'btn-warning', 'btn-sm');
+                    link_atualizar_usuario.textContent = 'Atualizar Usuário';
+                    link_atualizar_usuario.setAttribute('data-bs-toggle', 'modal');
+                    link_atualizar_usuario.setAttribute('data-bs-target', `#modal_atualizar-${usuario.cpf}`);
+                    link_atualizar_usuario.onclick = () => {
                         const modalElement = document.getElementById(`modal_atualizar-${usuario.cpf}`);
                         const modal = new bootstrap.Modal(modalElement);  // Cria uma instância do modal
                         modal.show();  // Exibe o modal
                     } 
 
-                    const link_remover = document.createElement('a');
-                    link_remover.href = '#';
-                    link_remover.classList.add('btn', 'btn-danger', 'btn-sm', 'ms-2');
-                    link_remover.textContent = '<i class="bi bi-person-fill-dash"></i>';
-                    link_remover.setAttribute('data-bs-toggle', 'modal');
-                    link_remover.setAttribute('data-bs-target', `#modal_remover-${usuario.cpf}`);
-                    link_remover.onclick = () => {
+                    const link_remover_usuario = document.createElement('a');
+                    link_remover_usuario.href = '#';
+                    link_remover_usuario.classList.add('btn', 'btn-danger', 'btn-sm', 'ms-2');
+                    link_remover_usuario.textContent = 'Remover Usuário';
+                    link_remover_usuario.setAttribute('data-bs-toggle', 'modal');
+                    link_remover_usuario.setAttribute('data-bs-target', `#modal_remover-${usuario.cpf}`);
+                    link_remover_usuario.onclick = () => {
                         const modalElementDeletar = document.getElementById(`modal_remover-${usuario.cpf}`);
                         const modalDeletar = new bootstrap.Modal(modalElementDeletar);  // Cria uma instância do modal
                         modalDeletar.show();  // Exibe o modal
@@ -373,25 +367,25 @@
                     cardBody.appendChild(cpf);
                     cardBody.appendChild(data_nasc);
                     cardBody.appendChild(telefone);
-                    cardBody.appendChild(link_atualizar);
-                    cardBody.appendChild(link_remover);
+                    cardBody.appendChild(link_atualizar_usuario);
+                    cardBody.appendChild(link_remover_usuario);
 
                     container.appendChild(card);
 
                     // Criar os modais de atualização e remoção para este usuário
 
                     // Modal de Atualização
-                    const modal_atualizar = document.createElement('div');
-                    modal_atualizar.classList.add('modal', 'fade');
-                    modal_atualizar.id = `modal_atualizar-${usuario.cpf}`;
-                    modal_atualizar.setAttribute('tabindex', '-1');
-                    modal_atualizar.setAttribute('aria-labelledby', `modal_atualizarLabel-${usuario.cpf}`);
-                    modal_atualizar.setAttribute('aria-hidden', 'true');
-                    modal_atualizar.innerHTML = `
+                    const modal_atualizar_usuario = document.createElement('div');
+                    modal_atualizar_usuario.classList.add('modal', 'fade');
+                    modal_atualizar_usuario.id = `modal_atualizar_usuario-${usuario.cpf}`;
+                    modal_atualizar_usuario.setAttribute('tabindex', '-1');
+                    modal_atualizar_usuario.setAttribute('aria-labelledby', `modal_atualizar_usuarioLabel-${usuario.cpf}`);
+                    modal_atualizar_usuario.setAttribute('aria-hidden', 'true');
+                    modal_atualizar_usuario.innerHTML = `
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="modalAtualizarLabel-${usuario.cpf}">Editar Usuário</h5>
+                                    <h5 class="modal-title" id="modal_atializar_usuarioLabel-${usuario.cpf}">Editar Usuário</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
@@ -417,20 +411,20 @@
                             </div>
                         </div>
                     `;
-                    container.appendChild(modal_atualizar);
+                    container.appendChild(modal_atualizar_usuario);
 
                     // Modal de Remoção
-                    const modal_deletar = document.createElement('div');
-                    modal_deletar.classList.add('modal', 'fade');
-                    modal_deletar.id = `modal_deletar-${usuario.cpf}`;
-                    modal_deletar.setAttribute('tabindex', '-1');
-                    modal_deletar.setAttribute('aria-labelledby', `modal_deletarLabel-${usuario.cpf}`);
-                    modal_deletar.setAttribute('aria-hidden', 'true');
-                    modal_deletar.innerHTML = `
+                    const modal_remover_usuario = document.createElement('div');
+                    modal_remover_usuario.classList.add('modal', 'fade');
+                    modal_remover_usuario.id = `modal_remover_usuario-${usuario.cpf}`;
+                    modal_remover_usuario.setAttribute('tabindex', '-1');
+                    modal_remover_usuario.setAttribute('aria-labelledby', `modal_remover_usuarioLabel-${usuario.cpf}`);
+                    modal_remover_usuario.setAttribute('aria-hidden', 'true');
+                    modal_remover_usuario.innerHTML = `
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="modal_deletarLabel-${usuario.cpf}">Remover Usuário</h5>
+                                    <h5 class="modal-title" id="modal_remover_usuarioLabel-${usuario.cpf}">Remover Usuário</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
@@ -443,9 +437,9 @@
                             </div>
                         </div>
                     `;
-                    container.appendChild(modal_deletar);
-                });
-                else{
+                    container.appendChild(modal_remover_usuario);
+            });
+            else{
                     //Criar o elemento do cartão
                     const card = document.createElement('div');
                     card.classList.add('card');
@@ -464,7 +458,7 @@
                     telefone.textContent = `Telefone: ${json.telefone}`;
                     
                     div.appendChild(card);
-                }
+            }
         }
     </script>
     
