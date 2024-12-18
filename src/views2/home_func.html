@@ -32,7 +32,7 @@
             <div class="input-caixa">
                 <input type="text" name="titulo" id="pesquisa" placeholder="Digite o livro procurado">
             </div>
-            <button class="pesquisa-button"> Buscar</button>
+            <button class="pesquisa-button">Buscar</button>
         </form>
     </nav>
 
@@ -42,53 +42,64 @@
         </div>
     </main>
 
-    <!--Cadastrar livro  -->
-    <rodape id="rodape">
-        <a href="/cadastrar" class="cadastrar-livro"> Cadastrar</a>
-    </rodape>
+    <!--Cadastrar livro no rodapé-->
+    <footer id="rodape">
+        <a href="/cadastrar" class="cadastrar-livro">Cadastrar</a>
+    </footer>
 
     <script>
         const base_url = "http://localhost:3000";
 
-        //Função para exibir todos os livros com base no dados pegos no bd (fetch)
+        //Função para exibir todos os livros com base nos dados pegos no banco (fetch)
         function renderizar_livros(json) {
             const cards = document.getElementById('cards-livros');
 
-            // Se o json não existir (indefinido = false) ele retorna pois é uma negação 
+            // Verifica se o json existe
             if (!json) {
                 console.log('Json indefinido');
                 return;
             }
 
-            // Se o json for um array/ lista 
+            // Caso o json seja uma lista
             if (json instanceof Array) {
                 json.forEach(livro => {
                     const card = document.createElement('div');
-                    card.classList.add('card-livro'); // Adiciona uma classe para os cards
+                    card.classList.add('livro-card'); // Adiciona a classe para os cards
 
                     card.innerHTML = `
-                <div id="titulo">Titulo: ${livro.titulo}</div>
-                <div id="botões">
-                    <button onclick="cadastrar_empres()">Emprestar</button>
-                </div>
-            `;
+                        <div class="livro-img">
+                            <img src="${livro.imagem}" alt="${livro.titulo}">
+                        </div>
+                        <div class="livro-info">
+                            <div class="livro-titulo">Título: ${livro.titulo}</div>
+                            <div class="livro-autor">Autor: ${livro.autor}</div>
+                            <div class="livro-ano">Ano de publicação: ${livro.ano}</div>
+                            <div class="livro-descricao">Descrição: ${livro.descricao}</div>
+                            <div id="botões">
+                                <button onclick="emprestar_livro(${livro.id})">Emprestar</button>
+                                <button onclick="devolver_livro(${livro.id})">Devolver</button>
+                            </div>
+                        </div>
+                    `;
 
                     cards.appendChild(card);
                 });
             }
-            // Se o json for apenas um objeto 
-            else {
-                const card = document.createElement('div');
-                card.classList.add('card-livro'); // Adiciona uma classe para o card
-
-                card.innerHTML = `
-            <div id="titulo">Titulo: ${json.nome}</div>
-        `;
-
-                cards.appendChild(card);
-            }
         }
 
+        //Função para emprestar livro
+        function emprestar_livro(id_livro) {
+            // lógica de empréstimo
+            console.log(`Emprestando livro com id: ${id_livro}`);
+            // Implemente a lógica de emprestimo, como uma requisição para o servidor
+        }
+
+        //Função para devolver livro
+        function devolver_livro(id_livro) {
+            // lógica de devolução
+            console.log(`Devolvendo livro com id: ${id_livro}`);
+            // Implemente a lógica de devolução, como uma requisição para o servidor
+        }
 
         //Solicitação GET de todos os livros
         function exibir_livros() {
@@ -98,37 +109,6 @@
                 .catch(error => {
                     console.error("Erro ao buscar Livros:", error);
                     alert("Erro ao buscar Livros.")
-                })
-        }
-
-        //Solicitação GET de livros por nome 
-        function pesquisar_livro() {
-            const titulo = document.getElementById('pesquisa').value;
-            fetch(`${base_url}/livros/${titulo}`)
-                .then(response => response.json())
-                .then(json => renderizar_livros(json))
-                .catch(error => {
-                    console.error("Erro ao buscar Livro:", error);
-                    alert("Erro ao buscar Livro.")
-                })
-        }
-
-        //Solicitação POST de emprestimo
-        function cadastrar_empres() {
-            const id_livro = document.getElementById('id_livro');
-            const cpf = document.getElementById('cpf');
-
-
-            fetch(`${base_url}/emprestimos`, {
-                method: 'POST',
-                body: JSON.stringify({ id_livro, cpf, data_emprestimo, data_devolucao_prevista }),
-                headers: { 'Content-Type': 'application/json' }
-            })
-                .then(response => response.json())
-                .then(json => renderizar_livros(json))
-                .catch(error => {
-                    console.error("Erro ao cadastradar emprestimo:", error);
-                    alert("Erro ao cadastradar emprestimo.")
                 })
         }
 

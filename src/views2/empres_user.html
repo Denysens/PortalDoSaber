@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal do Saber - Meus Empréstimos</title>
-    <link rel="stylesheet" href="/public/style.css">
+    <link rel="stylesheet" href="/public/style_empres_user.css">
     <script src="menu.js"></script>
 </head>
 
@@ -16,7 +16,7 @@
             <a href="javascript:void(0)" class="btn_fechar" onclick="fechar_menu()">Fechar</a>
             <a href="/home_comum">Home</a>
             <a href="#">Meus Empréstimos</a>
-            <a href="/login"></i>Sair</a>
+            <a href="/login">Sair</a>
         </div>
 
         <section id="principal">
@@ -30,54 +30,56 @@
     <!--Corpo da página-->
     <main id="main">
         <div id="cards-livros">
+            <!-- Aqui os cartões dos empréstimos serão adicionados dinamicamente -->
         </div>
     </main>
+
 
     <script>
         const base_url = "http://localhost:3000";
 
-        //Função para exibir todos os livros com base no dados pegos no bd (fetch)
+        // Função para exibir todos os empréstimos do usuário
         function renderizar_livros(json) {
             const cards = document.getElementById('cards-livros');
 
-            //Se o json não exitir (indefinido = false) ele retorna pois é uuma negação 
             if (!json) {
-                console.log('Json indefinido')
+                console.log('Json indefinido');
                 return;
+            }
 
-                //Se o json for um array/ lista 
-            } else if (json instanceof Array) {
+            if (json instanceof Array) {
                 json.forEach(emprestimo => {
                     const card = document.createElement('div');
+                    card.classList.add("card");
                     card.innerHTML = `
-                    <div id="codigo"> Código do empréstimo: ${emprestimo.id_emprestimo} </div>
-                    <div id="data_dev">Data de devolução prevista: ${emprestimo.data_devolucao_prevista} </div> `;
-
+                        <div id="codigo">Código do empréstimo: ${emprestimo.id_emprestimo}</div>
+                        <div id="data_dev">Data de devolução prevista: ${emprestimo.data_devolucao_prevista}</div>
+                    `;
                     cards.appendChild(card);
                 });
-                //Se o json for apenas um objeto 
             } else {
                 const card = document.createElement('div');
+                card.classList.add("card");
                 card.innerHTML = `
-                <div id="codigo"> Código: ${json.id_emprestimo} </div>
-                <div id="data_dev">Data de devolução prevista: ${json.data_devolucao_prevista} </div>`;
-
+                    <div id="codigo">Código: ${json.id_emprestimo}</div>
+                    <div id="data_dev">Data de devolução prevista: ${json.data_devolucao_prevista}</div>
+                `;
                 cards.appendChild(card);
             }
         }
 
-        //Solicitação GET dos livros emprestados pelo usuário
-        function exibir_livros(){
+        // Solicitação GET dos livros emprestados pelo usuário
+        function exibir_livros() {
             fetch(`${base_url}/emprestimos/usuario`)
-            .then(response => response.json())
-            .then(json => renderizar_livros(json))
-            .catch(error => {
-                console.error("Erro ao buscar Emprestimos:", error);
-                alert("Erro ao buscar Emprestimos.")
-            })
-        } 
-            
-        window.onload = exibir_livros(), exibir_user();
+                .then(response => response.json())
+                .then(json => renderizar_livros(json))
+                .catch(error => {
+                    console.error("Erro ao buscar Emprestimos:", error);
+                    alert("Erro ao buscar Emprestimos.");
+                });
+        }
+
+        window.onload = exibir_livros;
     </script>
 </body>
 

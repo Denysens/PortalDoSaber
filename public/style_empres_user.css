@@ -1,0 +1,135 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Body */
+body {
+    background-image: url("/public/img/fundo.png");
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ===== NAVBAR ===== */
+#nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #c0f0f7;
+    padding: 10px 20px;
+    color: white;
+    position: relative;
+}
+
+#title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    color: #227e8f;
+    margin: 0 auto;
+}
+
+/* ===== MENU OCULTO ===== */
+#menu_oculto {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #227e8f;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+#menu_oculto.aberto {
+    width: 250px;
+}
+
+#menu_oculto a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: white;
+    display: block;
+    transition: 0.5s;
+}
+
+#menu_oculto a:hover {
+    color: #c0f0f7;
+}
+
+/* ===== ABRIR MENU ===== */
+#principal span {
+    cursor: pointer;
+    font-size: 20px;
+    background-color: #227e8f;
+    color: #ffffff;
+    padding: 3px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+#principal span:hover {
+    background-color: #1a6774;
+}
+
+/* ===== CARDS DOS EMPRÉSTIMOS ===== */
+#main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* Container principal */
+#cards-livros {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Card de cada empréstimo */
+#cards-livros .card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+   
+    text-align: center;
+    padding: 15px;
+    width: 250px;
+    height: 150px;
+    transition: transform 0.3s ease;
+}
+
+#cards-livros .card:hover {
+    transform: translateY(-5px);
+}
+
+#codigo,
+#data_dev {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    #cards-livros {
+        grid-template-columns: 1fr;
+    }
+
+    #cards-livros div {
+        width: auto;
+    }
+}

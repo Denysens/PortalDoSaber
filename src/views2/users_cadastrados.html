@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal do Saber - Usuarios cadastrados</title>
-    <link rel="stylesheet" href="public/style.css">
+    <link rel="stylesheet" href="/public/style_usersCadastrados.css">
     <script src="menu.js"></script>
 </head>
 
@@ -53,6 +53,7 @@
             } else if (json instanceof Array) {
                 json.forEach(usuario => {
                     const card = document.createElement('div');
+                    card.classList.add('card');
                     card.innerHTML = `
                     <div id="nome"> Nome: ${usuario.nome} </div>
                     <div id="telefone"> Telefone ${usuario.telefone}</div>`;
@@ -62,6 +63,7 @@
                 //Se o json for apenas um objeto 
             } else {
                 const card = document.createElement('div');
+                card.classList.add('card');
                 card.innerHTML = `
                 <div id="nome"> Nome: ${usuario.nome} </div>
                 <div id="telefone"> Telefone ${usuario.telefone}</div>`;
