@@ -22,6 +22,11 @@ class Usuario_Controller {
         res.sendFile("./src/views2/users_cadastrados.html", { root: process.cwd() });
     }
 
+    //Direciona para a página de cadastro de usuários
+    async usuario_cadastrar(req, res) {
+        res.sendFile("./src/views2/cadastrar_user.html", { root: process.cwd() });
+    }
+
     //Autenticar login
     async autenticar_login(req, res) {
         const cpf = req.body.cpf;
@@ -51,28 +56,30 @@ class Usuario_Controller {
     }
 
     //De acordo com a requisição responde com os dados usuarios em json usando o model
-    async exibir(req, res) {
-        const usuarios = await Usuario_Model.busca();
+    async exibir_usuarios_ativos(req, res) {
+        const ativo = true;
+        const usuarios = await Usuario_Model.buscar_usuarios({ ativo });
         res.json(usuarios);
     }
 
-    //Exibir o usuario de acordo com a pesquisa por cpf
+    //Exibir o usuario ativo de acordo com a pesquisa por cpf
     async exibir_por_cpf(req, res) {
         const cpf = req.body.cpf;
-        const usuario = await Usuario_Model.busca_por_cpf(cpf);
+        const ativo = true;
+        const usuario = await Usuario_Model.buscar_por_cpf({ cpf, ativo });
         res.json(usuario);
     }
 
-    //Exibir usuarios por nome
+    //Exibir usuarios ativos por nome
     async exibir_por_nome(req, res) {
         const nome = req.body.nome;
-        const ativo = req.body.ativo;
-        const usuarios = await Usuario_Model.busca_por_nome({ nome, ativo });
+        const ativo = true;
+        const usuarios = await Usuario_Model.buscar_por_nome({ nome, ativo });
         res.json(usuarios);
     }
 
     //Cadastra o usuario 
-    async cadastar(req, res) {
+    async cadastrar_usuario(req, res) {
         const cpf = req.body.cpf;
         const nome = req.body.nome;
         const data_nasc = req.body.data_nasc;
@@ -80,33 +87,49 @@ class Usuario_Controller {
         const telefone = req.body.telefone;
         const tipo = req.body.tipo;
 
-        /*if(!cpf || !nome || !senha){
-            throw new Error("Campos obrigatórios")
-            return res.status(400).json({erro: 'Campos obrigatórios estão ausentes'});// status 400, erro por parte do cliente
+        if (!cpf || !nome || !senha) {
+            return res.status(400).json({ erro: 'Campos obrigatórios estão ausentes' });// status 400, erro por parte do cliente
         }
-        try{
-            res.status(201).json({message: "usuario cadastrado"}); //status 201 é de criado
-        }catch (error){
-            res.status(500).json({erro: 'Erro ao cadastar o usuario.'});
-        }*/
-        const usuario = await Usuario_Model.adicionar({ cpf, nome, data_nasc, senha, telefone, tipo });
-        res.json({ message: "Usuario cadastrado" })
+        try {
+            const usuario = await Usuario_Model.adicionar({ cpf, nome, data_nasc, senha, telefone, tipo });
+            res.status(201).json({ message: "usuario cadastrado" }); //status 201 é de criado
+        } catch (error) {
+            res.status(500).json({ erro: 'Erro ao cadastar o usuario.' });
+        }
     }
 
     //Atualizar dados do usuario ativo
-    async atualizar(req, res) {
+    async atualizar_usuario(req, res) {
         const cpf = req.body.cpf;
         const senha = req.body.senha;
         const telefone = req.body.telefone;
 
-        const usuario = await Usuario_Model.atualizar({ cpf, senha, telefone });
-        res.json({ message: "Usuario atualizado" });
+        if (!cpf || !senha) {
+            return res.status(400).json({ erro: 'Campos obrigatórios estão ausentes' });// status 400, erro por parte do cliente
+        }
+        try {
+            const usuario = await Usuario_Model.atualizar({ cpf, senha, telefone });
+            res.status(201).json({ message: "Usuario atualizado" }); //status 201 é de criado
+        } catch (error) {
+            res.status(500).json({ erro: 'Erro ao atualizar o usuario.' });
+        }
     }
 
     //Excluir usuario
-    async deletar(req, res) {
+    async deletar_usuario(req, res) {
         const cpf = req.body.cpf;
         const ativo = false;
+
+        if (!cpf) {
+            return res.status(400).json({ erro: 'Usuário inexistente' });// status 400, erro por parte do cliente
+        }
+        try {
+            const usuario = await Usuario_Model.ativar_desativar({ cpf, ativo});
+            res.status(201).json({ message: "Usuario deletado" }); //status 201 é de criado
+        } catch (error) {
+            res.status(500).json({ erro: 'Erro ao deletar o usuario.' });
+        }
+
         const usuario = await Usuario_Model.ativar_desativar({ cpf, ativo });
         res.json({ message: "Usuario deletado" });
     }

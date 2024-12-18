@@ -1,4 +1,5 @@
 import Emprestimo_Model from "../model/Emprestimo_Model.js";
+import Livro_Model from "../model/Livro_Model.js";
 
 class Emprestimo_Controller {
 
@@ -13,21 +14,16 @@ class Emprestimo_Controller {
     }
     
     //Exibir todos os emprestimos 
-    async exibir(req, res) {
-        const emprestimos = await Emprestimo_Model.buscar();
-        res.json(emprestimos)
-    }
-
-    //Exibir um emprestimo pela pesquisa de id 
-    async exibir_ativos(req, res) {
-        const emprestimos = await Emprestimo_Model.buscar_emprestimos_ativos();
+    async exibir_emprestimos_ativos(req, res) {
+        const ativo = true;
+        const emprestimos = await Emprestimo_Model.buscar_emprestimos({ativo});
         res.json(emprestimos)
     }
 
     //Todos os emprestimos do usuario 
     async exibir_emprestimos_usuario(req, res) {
         const id_usuario = req.session.cpf;
-        const emprestimos = await Emprestimo_Model.buscar_por_id_user(id_usuario);
+        const emprestimos = await Emprestimo_Model.buscar_por_id_user({id_usuario});
         res.json(emprestimos)
     }
 
@@ -36,18 +32,43 @@ class Emprestimo_Controller {
         const usuario_id = req.body.usuario_id;
         const livro_id = req.body.livro_id;
         const data_devolucao_prevista = req.body.data_devolucao_prevista;
-
-        const emprestimo = await Emprestimo_Model.adicionar({ usuario_id, livro_id, data_devolucao_prevista });
-        res.json({ message: "Empréstimo cadastrado" })
-    }
+            try {
+              const novo_emprestimo = await Emprestimo_Model.adicionar({usuario_id,livro_id,data_devolucao_prevista});
+              res.status(201).json({
+                message: 'Empréstimo realizado com sucesso!',
+                emprestimo: novo_emprestimo,
+              });
+            } catch (error) {
+              res.status(400).json({ message: error.message });
+            }
+          }
 
     //finalizar um empréstimo, definindo a data de devolução 
     async atualizar(req, res) {
-        const id = req.params.id;
-        const ativo = false;
-        const emprestimo = await Emprestimo_Model.editar({ id, ativo });
+        const id  = req.body.id_livro;
 
-        res.json({ message: "Emprestimo atualizado" })
+        try {
+            // Encontra o empréstimo ativo para o livro
+            const emprestimo = await Emprestimo_Model.buscar_por_id_livro(id);
+            const id_emprestimo = emprestimo.id_emprestimo;
+
+            if (!emprestimo) {
+                return res.status(404).json({ message: 'Empréstimo não encontrado.' });
+            }
+    
+            // Atualiza o registro para marcar a devolução
+            const emprestimo_atualizado = await Emprestimo_Model.atualizar_devolucao({id_emprestimo});
+    
+            // Atualiza o livro para ficar disponível
+            const ativo = true;
+            const disponivel = true;
+            const livro_atualizado = await Livro_Model.atualizar_disponibilidade({id, ativo, disponivel});
+    
+            res.status(200).json({ message: 'Livro devolvido com sucesso.' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Erro ao devolver o livro.' });
+        }
     }
 }
 

@@ -3,19 +3,19 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 class Livro_Model {
-    //Consulta o BD e retornar todos os livros ativos
-    async buscar(ativo) {
+    //Pesquisa os livros 
+    async buscar_livros(livro) {
         const livros = await prisma.livros.findMany({
             where: {
-                ativo: ativo
+                ativo: livro.ativo
             }
         });
         return livros;
     }
-    
+
     //Pesquisa o livro pelo nome 
     async buscar_por_titulo(livro) {
-        const livro_buscado = await prisma.livros.findMany({
+        const livros_buscados = await prisma.livros.findMany({
             where: {
                 AND: [
                     {
@@ -24,10 +24,22 @@ class Livro_Model {
                             mode: 'insensitive',
                         }
                     },
-                    { ativo: Boolean(livro.ativo)}
+                    { ativo: Boolean(livro.ativo) }
                 ]
             }
         });
+        return livros_buscados;
+    }
+    //Pesquisa o livro por id
+    async buscar_por_id(livro) {
+        const livro_buscado = await prisma.livros.findMany({
+            where: {
+                AND: [
+                    { id_livro: Number(livro.id_livro) },
+                    { ativo: livro.ativo }
+                ]
+            }
+        })
         return livro_buscado;
     }
 
@@ -47,18 +59,14 @@ class Livro_Model {
     }
 
     //Atualizar o estado de empréstimo do livro
-    async atualizar(livro) {
-        const livro_atualizado = await prisma.livros.updateMany({
+    async atualizar_disponibilidade(livro) {
+        const livro_atualizado = await prisma.livros.update({
             where: {
-                AND: [
-                    { id_livro: Number(livro.id) },
-                    { ativo: Boolean(livro.ativo) }
-                ]
+                id_livro: Number(livro.id_livro),
+                ativo: livro.ativo
             },
-            data: {
-                disponivel: Boolean(livro.disponivel),
-            },
-        });
+            data: { disponivel: livro.disponivel },
+        })
         return livro_atualizado
     }
 
@@ -87,18 +95,7 @@ class Livro_Model {
         return livros;
     }*/
 
-    //Pesquisa o livro por id
-    /*async buscar_por_id(livro) {
-        const livro_buscado = await prisma.livros.findMany({
-            where: {
-                AND: [
-                    { id_livro: Number(livro.id) },
-                    { ativo: livro.ativo }
-                ]
-            }
-        })
-        return livro_buscado;
-    }*/
+
 }
 
 export default new Livro_Model();

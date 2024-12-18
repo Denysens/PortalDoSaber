@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal do Saber - Home User</title>
+    <link rel="stylesheet" href="public/style_geral.css">
     <link rel="stylesheet" href="public/style_userComum.css">
 </head>
 
@@ -13,14 +14,14 @@
     <nav id="nav">
         <!--Menu oculto-->
         <div id="menu_oculto">
-            <a href="javascript:void(0)" class="btn_fechar" onclick="fechar_menu()">Fechar</a>
             <a href="home_comum">Home</a>
             <a href="empres_user/views">Meus Empréstimos</a>
             <a href="login">Sair</a>
+            <a href="javascript:void(0)" class="btn_fechar">Fechar</a>
         </div>
 
         <section id="principal">
-            <span onclick="abrir_menu()">Abrir</span>
+            <span>Abrir</span>
         </section>
 
         <!--Titulo-->
@@ -114,7 +115,12 @@
         window.onload = exibir_livros();
     </script>
 
-    <script src="/menu.js"></script>
+    <script type="module">
+        import { abrir_menu, fechar_menu } from './public/menu.js';
+
+        document.querySelector('#principal span').onclick = abrir_menu;
+        document.querySelector('.btn_fechar').onclick = fechar_menu;
+    </script>
 </body>
 
 </html>

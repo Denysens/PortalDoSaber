@@ -4,33 +4,35 @@ const prisma = new PrismaClient();
 
 class Usuario_Model {
     //Consulta o BD e retornar todos os usuarios ativos
-    async busca() {
+    async buscar_usuarios(usuario) {
         const usuarios = await prisma.usuarios.findMany({
             where: {
-                ativo: true
+                ativo: usuario.ativo
             }
         });
         return usuarios;
     }
 
     //Pesquisa o usuario pelo CPF
-    async busca_por_cpf(cpf) {
+    async buscar_por_cpf(usuario) {
         const usuario_buscado = await prisma.usuarios.findUnique({
             where: {
-                cpf: Number(cpf)
+                cpf: Number(usuario.cpf),
+                ativo: Boolean(usuario.ativo)
             }
         });
         return usuario_buscado;
     }
 
     //Pesquisa o usuario pelo nome 
-    async busca_por_nome(nome) {
+    async buscar_por_nome(usuario) {
         const usuarios = await prisma.usuarios.findMany({
             where: {
                 nome: {
-                    contains: String(nome),
+                    contains: String(usuario.nome),
                     mode: 'insensitive', //não deferencia maiúscula e minúscula
-                }
+                },
+                ativo: usuario.ativo
             }
         });
         return usuarios;

@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal do Saber - Usuarios cadastrados</title>
+    <link rel="stylesheet" href="/public/style_geral.css">
     <link rel="stylesheet" href="/public/style_usersCadastrados.css">
-    <script src="menu.js"></script>
 </head>
 
 <body>
@@ -35,7 +35,11 @@
         <div id="cards-usuarios">
         </div>
     </main>
-
+    
+    <!--Cadastrar livro no rodapé-->
+    <footer id="rodape">
+        <a href="/cadastrar/user" class="cadastrar-usuario">Cadastrar</a>
+    </footer>
 
     <script>
         const base_url = "http://localhost:3000";
@@ -95,8 +99,14 @@
                 })
         }
         */
-       
+
         window.onload = exibir_usuarios();
+    </script>
+    <script type="module">
+        import { abrir_menu, fechar_menu } from '/public/menu.js';
+
+        document.querySelector('#principal span').onclick = abrir_menu;
+        document.querySelector('.btn_fechar').onclick = fechar_menu;
     </script>
 </body>
 

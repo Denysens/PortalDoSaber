@@ -1,80 +1,3 @@
-/* Reset básico */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-
-/* Body */
-body {
-    background-image: url("/public/img/fundo.png");
-    color: #333;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* ===== NAVBAR ===== */
-#nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #c0f0f7;
-    /* Azul */
-    padding: 10px 20px;
-    color: white;
-    width: 100%;
-    position: relative;
-}
-
-#principal span {
-    font-size: 16px;
-    cursor: pointer;
-    padding: 5px 10px;
-    background-color: #227e8f;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-#principal span:hover {
-    background-color: #227e8f;
-    color: #fff;
-}
-
-#menu_oculto {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: #333;
-    color: white;
-    width: 200px;
-    height: 100%;
-    display: none;
-    flex-direction: column;
-    padding: 20px;
-    z-index: 10;
-}
-
-#menu_oculto a {
-    color: white;
-    text-decoration: none;
-    margin: 15px 0;
-    font-size: 16px;
-    transition: color 0.3s ease;
-}
-
-#menu_oculto a:hover {
-    color:white;
-}
-
-.btn_fechar {
-    font-weight: bold;
-    cursor: pointer;
-    text-align: right;
-}
-
 /* ===== FORMULÁRIO ===== */
 #container {
     margin-top: 30px;
@@ -85,6 +8,8 @@ body {
     border-radius: 8px;
     padding: 20px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
 }
 
 .login-titulo {
@@ -145,10 +70,6 @@ body {
 
 /* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
-    #nav {
-        flex-direction: column;
-        align-items: flex-start;
-    }
 
     #container {
         margin-top: 20px;

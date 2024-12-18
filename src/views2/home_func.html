@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal do Saber - Home Funcionário</title>
+    <link rel="stylesheet" href="public/style_geral.css">
     <link rel="stylesheet" href="public/style_userFunc.css">
 </head>
 
@@ -13,15 +14,15 @@
     <nav id="nav">
         <!--Menu oculto-->
         <div id="menu_oculto">
-            <a href="javascript:void(0)" class="btn_fechar" onclick="fechar_menu()">Fechar</a>
             <a href="#">Home</a>
             <a href="emprestimos/views">Empréstimos </a>
             <a href="usuarios/views">Usuários</a>
             <a href="login"></i>Sair</a>
+            <a href="javascript:void(0)" class="btn_fechar">Fechar</a>
         </div>
 
         <section id="principal">
-            <span onclick="abrir_menu()">Abrir</span>
+            <span>Abrir</span>
         </section>
 
         <!--Titulo-->
@@ -44,7 +45,7 @@
 
     <!--Cadastrar livro no rodapé-->
     <footer id="rodape">
-        <a href="/cadastrar" class="cadastrar-livro">Cadastrar</a>
+        <a href="/cadastrar/livros" class="cadastrar-livro">Cadastrar</a>
     </footer>
 
     <script>
@@ -68,16 +69,16 @@
 
                     card.innerHTML = `
                         <div class="livro-img">
-                            <img src="${livro.imagem}" alt="${livro.titulo}">
+                            <img src="${livro.imagem || 'public/default-book.jpg'}" alt="${livro.titulo} ">
                         </div>
                         <div class="livro-info">
                             <div class="livro-titulo">Título: ${livro.titulo}</div>
                             <div class="livro-autor">Autor: ${livro.autor}</div>
-                            <div class="livro-ano">Ano de publicação: ${livro.ano}</div>
+                            <div class="livro-ano">Ano de publicação: ${livro.ano_publicacao}</div>
                             <div class="livro-descricao">Descrição: ${livro.descricao}</div>
                             <div id="botões">
-                                <button onclick="emprestar_livro(${livro.id})">Emprestar</button>
-                                <button onclick="devolver_livro(${livro.id})">Devolver</button>
+                                <button onclick="emprestar_livro(${livro.id_livro})">Emprestar</button>
+                                <button onclick="devolver_livro(${livro.id_livro})">Devolver</button>
                             </div>
                         </div>
                     `;
@@ -87,19 +88,63 @@
             }
         }
 
-        //Função para emprestar livro
+        // Função para emprestar um livro
         function emprestar_livro(id_livro) {
-            // lógica de empréstimo
-            console.log(`Emprestando livro com id: ${id_livro}`);
-            // Implemente a lógica de emprestimo, como uma requisição para o servidor
+            const usuario_id = 123456 // ID do usuário fixo ou obtido de uma sessão/login
+            const data_devolucao_prevista = new Date();
+            data_devolucao_prevista.setDate(data_devolucao_prevista.getDate() + 15); // Devolução em 15 dias
+
+            fetch(`${base_url}/emprestimos`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", },
+                body: JSON.stringify({
+                    usuario_id: usuario_id,
+                    livro_id: id_livro,
+                    data_devolucao_prevista: data_devolucao_prevista,
+                }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.message) {
+                        alert(data.message);
+                    } else {
+                        alert("Erro ao realizar o empréstimo.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Erro ao realizar empréstimo:", error);
+                    alert("Erro ao conectar com o servidor.");
+                });
         }
 
+
         //Função para devolver livro
-        function devolver_livro(id_livro) {
-            // lógica de devolução
-            console.log(`Devolvendo livro com id: ${id_livro}`);
-            // Implemente a lógica de devolução, como uma requisição para o servidor
+        function devolver_livro(livro_id) {
+            // Confirmação para o usuário
+            if (!confirm('Deseja devolver este livro?')) return;
+
+            // Faz uma requisição PUT ao servidor para devolver o livro
+            fetch(`${base_url}/emprestimos`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ livro_id: livro_id })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao devolver o livro');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert('Livro devolvido com sucesso!');
+                    location.reload(); // Recarrega a página para atualizar a lista
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Não foi possível devolver o livro.');
+                });
         }
+
 
         //Solicitação GET de todos os livros
         function exibir_livros() {
@@ -115,7 +160,13 @@
         window.onload = exibir_livros();
     </script>
 
-    <script src="/menu.js"></script>
+    <script type="module">
+        import { abrir_menu, fechar_menu } from './public/menu.js';
+
+        document.querySelector('#principal span').onclick = abrir_menu;
+        document.querySelector('.btn_fechar').onclick = fechar_menu;
+    </script>
+
 </body>
 
 </html>

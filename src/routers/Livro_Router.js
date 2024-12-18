@@ -5,11 +5,11 @@ const livro_router = Router();
 
 //Rotas dos livros
 
-livro_router.get('/livros', Livro_Controller.exibir);
+livro_router.get('/livros', Livro_Controller.exibir_livros_ativos);
 livro_router.get('/livros/:titulo', Livro_Controller.exibir_por_titulo);
 
-livro_router.get('/cadastrar', verificar_login, Livro_Controller.cadastrar_livro);
-livro_router.post('/livros',verificar_login, Livro_Controller.cadastar); 
+livro_router.get('/cadastrar/livros', verificar_login, Livro_Controller.cadastrar_livro);
+livro_router.post('/livros',verificar_login, Livro_Controller.cadastrar); 
 
 livro_router.put('/livros/:id',verificar_login, Livro_Controller.atualizar_emprestimo);
 livro_router.delete('/livros/:id',verificar_login, Livro_Controller.deletar);

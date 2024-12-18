@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal do Saber - Cadastrar Livro</title>
-    <link rel="stylesheet" href="public/style_add_livro.css">
-    <script src="menu.js"></script>
+    <link rel="stylesheet" href="/public/style_geral.css">
+    <link rel="stylesheet" href="/public/style_add_livro.css">
 </head>
 
 <body>
@@ -43,13 +43,24 @@
                 <label for="categoria">Categoria: </label>
                 <select id="categoria" name="categoria">
                     <option value=1>Romance</option>
-                    <option value=3>Comédia</option>
+                    <option value=2>Ficção</option>
+                    <option value=3>Poesia</option>
+                    <option value=4>Terror</option>
+                    <option value=5>Religioso</option>
+                    <option value=6>Tragédia</option>
+                    <option value=1>Pedagógico</option>
                 </select>
             </div>
             <button class="login-button" type="submit">Cadastrar</button>
         </form>
     </div>
 
+    <script type="module">
+        import { abrir_menu, fechar_menu } from '/public/menu.js';
+
+        document.querySelector('#principal span').onclick = abrir_menu;
+        document.querySelector('.btn_fechar').onclick = fechar_menu;
+    </script>
 </body>
 
 </html>

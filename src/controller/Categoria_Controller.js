@@ -2,7 +2,7 @@ import Categoria_Model from "../model/Categoria_Model.js";
 
 class Categoria_Controller {
 
-    //De acordo com a requisição responde com os dados categorias em json usando o model
+    //Exibir todas categorias 
     async exibir(req, res) {
         const categorias = await Categoria_Model.buscar();
         res.json(categorias);
@@ -16,11 +16,11 @@ class Categoria_Controller {
     }
 
     //Exibir categorias por nome
-    /*async exibir_por_nome(req, res) {
+    async exibir_por_nome(req, res) {
         const nome = req.body.nome;
         const categorias = await Categoria_Model.buscar_por_nome(nome);
         res.json(categorias);
-    }*/
+    }
 
     //Cadastra o categoria 
     async cadastar(req, res) {

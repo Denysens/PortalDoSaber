@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal do Saber - Empréstimos</title>
+    <link rel="stylesheet" href="/public/style_geral.css">
     <link rel="stylesheet" href="/public/style_emprestimos.css">
 </head>
 
@@ -134,6 +135,12 @@
         }
         */
         window.onload = exibir_emprestimos();
+    </script>
+    <script type="module">
+        import { abrir_menu, fechar_menu } from '/public/menu.js';
+
+        document.querySelector('#principal span').onclick = abrir_menu;
+        document.querySelector('.btn_fechar').onclick = fechar_menu;
     </script>
 </body>
 
