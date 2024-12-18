@@ -32,7 +32,7 @@ model Emprestimos {
   usuario_id              Int
   livro_id                Int
   data_emprestimo         DateTime  @default(now())
-  data_devolucao_prevista DateTime
+  data_devolucao_prevista DateTime?
   data_devolucao          DateTime? @updatedAt()
   ativo                   Boolean   @default(true)
 

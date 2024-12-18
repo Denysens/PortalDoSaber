@@ -5,14 +5,17 @@ import { verificar_login } from "../middlewares/type.js";
 
 const emprestimo_router = Router();
 
-emprestimo_router.get('/emprestimos', Emprestimo_Controller.exibir); //verificar_login
+emprestimo_router.get('/empres_user/views', auth, Emprestimo_Controller.empres_user);
+emprestimo_router.get('/emprestimos/views',verificar_login, Emprestimo_Controller.emprestimos);
 
-emprestimo_router.get('/emprestimos/ativos', Emprestimo_Controller.exibir_ativos); //verificar_login
+emprestimo_router.get('/emprestimos',verificar_login,Emprestimo_Controller.exibir); 
 
-emprestimo_router.get('/emprestimos/usuario', Emprestimo_Controller.exibir_emprestimos_usuario); //auth
+emprestimo_router.get('/emprestimos/ativos', verificar_login, Emprestimo_Controller.exibir_ativos); 
 
-emprestimo_router.post('/emprestimos', Emprestimo_Controller.cadastrar); //verificar_login
+emprestimo_router.get('/emprestimos/usuario', auth, Emprestimo_Controller.exibir_emprestimos_usuario); 
 
-emprestimo_router.put('/emprestimos/:id', Emprestimo_Controller.atualizar); //verificar_login
+emprestimo_router.post('/emprestimos', verificar_login, Emprestimo_Controller.cadastrar); 
+
+emprestimo_router.put('/emprestimos/:id', verificar_login, Emprestimo_Controller.atualizar); 
 
 export default emprestimo_router;

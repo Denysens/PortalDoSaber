@@ -1,36 +1,25 @@
 import Livro_Model from "../model/Livro_Model.js";
 
 class Livro_Controller {
-
     //De acordo com a requisição responde com os dados livros ativos em json usando o model
     async exibir(req, res) {
-        const livros = await Livro_Model.buscar();
+        const ativo = true;
+        const livros = await Livro_Model.buscar(ativo);
         res.json(livros);
-    }
-
-    //Exibir os livros por categoria
-    async exibir_por_categoria(req, res) {
-        const id_categoria = req.body.id_categoria;
-        const ativo = req.body.ativo;
-        const livros = await Livro_Model.buscar_por_categoria({ id_categoria, ativo });
-        res.json(livros);
-    }
-
-    //Exibir o livro de acordo com a pesquisa por id 
-    async exibir_por_id(req, res) {
-        const id = req.params.id;
-        const ativo = req.body.ativo;
-        const livro = await Livro_Model.buscar_por_id({ id, ativo });
-        res.json(livro);
     }
 
     //Exibir livros por nome
-    /*async exibir_por_titulo(req, res) {
-        const titulo = req.body.titulo;
-        const ativo = req.body.ativo;
+    async exibir_por_titulo(req, res) {
+        const titulo = req.params.titulo;
+        const ativo = true;
         const livros = await Livro_Model.buscar_por_titulo({ titulo, ativo });
         res.json(livros);
-    }*/
+    }
+
+    //Direcionar para a página de cadastrar livros 
+    async cadastrar_livro(req, res) {
+        res.sendFile("./src/views2/cadastrar_livro.html", { root: process.cwd() });
+    }
 
     //Cadastra o livro 
     async cadastar(req, res) {
@@ -52,7 +41,7 @@ class Livro_Controller {
         const livro = await Livro_Model.adicionar({ titulo, autor, editora, ano_publicacao, descricao, categoria_id });
         res.json({ message: "Livro cadastrado" })
     }
-
+    
     //Atualizar estado do livro (empréstimo)
     async atualizar_emprestimo(req, res) {
         const id = req.params.id;
@@ -69,6 +58,22 @@ class Livro_Controller {
         const livro = await Livro_Model.ativar_desativar({ id, ativo });
         res.json({ message: "Livro deletado" })
     }
+
+    //Exibir os livros por categoria
+    /*async exibir_por_categoria(req, res) {
+        const id_categoria = req.body.id_categoria;
+        const ativo = req.body.ativo;
+        const livros = await Livro_Model.buscar_por_categoria({ id_categoria, ativo });
+        res.json(livros);
+    }*/
+
+    //Exibir o livro de acordo com a pesquisa por id 
+    /*async exibir_por_id(req, res) {
+        const id = req.params.id;
+        const ativo = req.body.ativo;
+        const livro = await Livro_Model.buscar_por_id({ id, ativo });
+        res.json(livro);
+    }*/
 }
 
 export default new Livro_Controller();

@@ -104,7 +104,7 @@
     <div class="rodape">
         <!-- Button trigger modal -->
         <button id="botao_add_emp" type="button" class="btn btn-info btn-lg" data-bs-toggle="modal"
-            data-bs-target="#staticBackdrop"><i class="bi bi-file-earmark-plus-fill"></i></button>
+            data-bs-target="cadastrar_livro"><i class="bi bi-file-earmark-plus-fill"></i></button>
 
         <!-- Modal -->
         <div class="modal fade" id="cadastrar_livro" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -294,7 +294,7 @@
 
             fetch(`${base_url}`, {
                 method: 'POST',
-                body: JSON.stringify({ titulo, autor, editora, ano_publicacao, categoria, descricao }),
+                body: JSON.stringify({ titulo, autor, editora, ano_publicacao, categoria, descricao}),
                 headers: { 'Content-Type': 'application/json' }
             })
                 .then(response => response.json())

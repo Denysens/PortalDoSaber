@@ -1,0 +1,161 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Body */
+body {
+    background-color: #f4f4f9;
+    color: #333;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ===== NAVBAR ===== */
+#nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1976D2;
+    /* Azul */
+    padding: 10px 20px;
+    color: white;
+    width: 100%;
+    position: relative;
+}
+
+#principal span {
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px 10px;
+    background-color: #1565C0;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#principal span:hover {
+    background-color: #0D47A1;
+    color: #fff;
+}
+
+#menu_oculto {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #333;
+    color: white;
+    width: 200px;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    padding: 20px;
+    z-index: 10;
+}
+
+#menu_oculto a {
+    color: white;
+    text-decoration: none;
+    margin: 15px 0;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+#menu_oculto a:hover {
+    color: #1976D2;
+}
+
+.btn_fechar {
+    font-weight: bold;
+    cursor: pointer;
+    text-align: right;
+}
+
+/* ===== FORMULÁRIO ===== */
+#container {
+    margin-top: 30px;
+    width: 100%;
+    max-width: 400px;
+    background-color: #fff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+}
+
+.login-titulo {
+    font-size: 28px;
+    color: #1976D2;
+    margin-bottom: 10px;
+}
+
+.login-subtitulo {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.input-caixa {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-caixa input,
+.input-caixa select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.input-caixa input:focus,
+.input-caixa select:focus {
+    border-color: #1976D2;
+}
+
+.input-caixa label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    color: #555;
+}
+
+.login-button {
+    background-color: #1976D2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.login-button:hover {
+    background-color: #0D47A1;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+    #nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #container {
+        margin-top: 20px;
+        padding: 15px;
+    }
+
+    .login-titulo {
+        font-size: 24px;
+    }
+}

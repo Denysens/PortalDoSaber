@@ -24,17 +24,17 @@ class Usuario_Model {
     }
 
     //Pesquisa o usuario pelo nome 
-    /*    async busca_por_nome(nome) {
-            const usuarios = await prisma.usuarios.findMany({
-                where: {
-                    nome: {
-                        contains: String(nome),
-                        mode: 'insensitive', //não deferencia maiúscula e minúscula
-                    }
+    async busca_por_nome(nome) {
+        const usuarios = await prisma.usuarios.findMany({
+            where: {
+                nome: {
+                    contains: String(nome),
+                    mode: 'insensitive', //não deferencia maiúscula e minúscula
                 }
-            });
-            return usuarios;
-        }*/
+            }
+        });
+        return usuarios;
+    }
 
     //Insere um novo usuario
     async adicionar(usuario) {

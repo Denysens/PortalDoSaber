@@ -4,43 +4,17 @@ const prisma = new PrismaClient();
 
 class Livro_Model {
     //Consulta o BD e retornar todos os livros ativos
-    async buscar() {
+    async buscar(ativo) {
         const livros = await prisma.livros.findMany({
             where: {
-                ativo: true
+                ativo: ativo
             }
         });
         return livros;
     }
-
-    //Pesquisa o livro por categoria
-    async buscar_por_categoria(livro) {
-        const livros = await prisma.livros.findMany({
-            where: {
-                AND: [
-                    { categoria_id: Number(livro.id_categoria) },
-                    { ativo: livro.ativo },
-                ]
-            }
-        })
-        return livros;
-    }
-
-    //Pesquisa o livro por id
-    async buscar_por_id(livro) {
-        const livro_buscado = await prisma.livros.findMany({
-            where: {
-                AND: [
-                    { id_livro: Number(livro.id) },
-                    { ativo: livro.ativo }
-                ]
-            }
-        })
-        return livro_buscado;
-    }
-
+    
     //Pesquisa o livro pelo nome 
-    /*async buscar_por_titulo(livro) {
+    async buscar_por_titulo(livro) {
         const livro_buscado = await prisma.livros.findMany({
             where: {
                 AND: [
@@ -50,15 +24,15 @@ class Livro_Model {
                             mode: 'insensitive',
                         }
                     },
+                    { ativo: Boolean(livro.ativo)}
                 ]
             }
         });
         return livro_buscado;
-    }*/
+    }
 
     //Insere um novo livro
     async adicionar(livro) {
-        console.log(livro)
         const novo_livro = await prisma.livros.create({
             data: {
                 titulo: livro.titulo,
@@ -69,7 +43,6 @@ class Livro_Model {
                 categoria_id: Number(livro.categoria_id),
             },
         });
-        console.log(novo_livro);
         return novo_livro;
     }
 
@@ -100,6 +73,32 @@ class Livro_Model {
         })
         console.log(livro_deletado);
     }
+
+    //Pesquisa o livro por categoria
+    /*async buscar_por_categoria(livro) {
+        const livros = await prisma.livros.findMany({
+            where: {
+                AND: [
+                    { categoria_id: Number(livro.id_categoria) },
+                    { ativo: livro.ativo },
+                ]
+            }
+        })
+        return livros;
+    }*/
+
+    //Pesquisa o livro por id
+    /*async buscar_por_id(livro) {
+        const livro_buscado = await prisma.livros.findMany({
+            where: {
+                AND: [
+                    { id_livro: Number(livro.id) },
+                    { ativo: livro.ativo }
+                ]
+            }
+        })
+        return livro_buscado;
+    }*/
 }
 
 export default new Livro_Model();

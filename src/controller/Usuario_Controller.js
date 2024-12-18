@@ -2,19 +2,24 @@ import Usuario_Model from "../model/Usuario_Model.js";
 
 class Usuario_Controller {
 
-    //Direcionar para a página de login - (GET e erros ao logar)
+    //Direcionar para a página de login
     async login(req, res) {
-        res.sendFile("./src/views/login.html", { root: process.cwd() });
+        res.sendFile("./src/views2/login.html", { root: process.cwd() });
     }
 
     //Direcionar para a página de usuário comum
-    async principal_userC(req, res) {
-        res.sendFile("./src/views/principal_userC.html", { root: process.cwd() });
+    async home_comum(req, res) {
+        res.sendFile("./src/views2/home_comum.html", { root: process.cwd() });
     }
 
-    //Direcionar para a página do bibliotecário/ funcionnário
-    async principal_userF(req, res) {
-        res.sendFile("./src/views/principal_userF.html", { root: process.cwd() });
+    //Direcionar para a página do bibliotecário/ funcionário
+    async home_func(req, res) {
+        res.sendFile("./src/views2/home_func.html", { root: process.cwd() });
+    }
+
+    //Direciona para uma página com os usuários cadastrados 
+    async usuarios_cadastrados(req, res) {
+        res.sendFile("./src/views2/users_cadastrados.html", { root: process.cwd() });
     }
 
     //Autenticar login
@@ -33,14 +38,15 @@ class Usuario_Controller {
             return res.redirect("login");
         }
 
+        req.session.cpf = usuario.cpf;
         req.session.logado = true;
         req.session.tipo = usuario.tipo;
 
         if (usuario.tipo == "func") {
-            return res.redirect("principal_userF");
+            return res.redirect("home_func");
 
         } else {
-            return res.redirect("principal_userC");
+            return res.redirect("home_comum");
         }
     }
 
@@ -58,12 +64,12 @@ class Usuario_Controller {
     }
 
     //Exibir usuarios por nome
-    /*    async exibir_por_nome(req, res) {
-            const nome = req.body.nome;
-            const ativo = req.body.ativo;
-            const usuarios = await Usuario_Model.busca_por_nome({ nome, ativo });
-            res.json(usuarios);
-        }*/
+    async exibir_por_nome(req, res) {
+        const nome = req.body.nome;
+        const ativo = req.body.ativo;
+        const usuarios = await Usuario_Model.busca_por_nome({ nome, ativo });
+        res.json(usuarios);
+    }
 
     //Cadastra o usuario 
     async cadastar(req, res) {

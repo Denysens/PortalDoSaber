@@ -29,7 +29,7 @@ app.use(router);
 
 //Envia para a página / o arq login.html, se este estiver na mesma pasta das demais (process.cwd)
 app.get('/', (req, res) => {
-    res.sendFile("./src/teste/login.html", { root: process.cwd() });
+    res.sendFile("./src/views2/login.html", { root: process.cwd() });
 });
 
 //app.use(errorHandler)

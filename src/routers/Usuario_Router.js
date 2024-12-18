@@ -6,23 +6,25 @@ import { verificar_login } from "../middlewares/type.js";
 const usuario_router = Router();
 
 //Rotas dos Usuários
+
 usuario_router.get('/login', Usuario_Controller.login);
 usuario_router.post('/login', Usuario_Controller.autenticar_login);
 
-usuario_router.get('/principal_userC', auth, Usuario_Controller.principal_userC);
-usuario_router.get('/principal_userF', verificar_login, Usuario_Controller.principal_userF);
+usuario_router.get('/home_comum', auth, Usuario_Controller.home_comum);
+usuario_router.get('/home_func', verificar_login, Usuario_Controller.home_func);
 
-usuario_router.get('/usuarios', Usuario_Controller.exibir); //verificar_login
+usuario_router.get('/usuarios/views', Usuario_Controller.usuarios_cadastrados);
+usuario_router.get('/usuarios', verificar_login, Usuario_Controller.exibir); 
 
-usuario_router.get('/usuarios/cpf', Usuario_Controller.exibir_por_cpf); //verificar_login
+usuario_router.get('/usuarios/cpf',verificar_login, Usuario_Controller.exibir_por_cpf); 
 
-//usuario_router.get('/usuarios/nome', Usuario_Controller.exibir_por_nome); //verificar_login
+usuario_router.get('/usuarios/nome', verificar_login, Usuario_Controller.exibir_por_nome); 
 
-usuario_router.post('/usuarios', Usuario_Controller.cadastar);
+usuario_router.post('/usuarios', verificar_login, Usuario_Controller.cadastar);
 
-usuario_router.put('/usuarios', Usuario_Controller.atualizar); //auth
+usuario_router.put('/usuarios',auth, Usuario_Controller.atualizar);
 
-usuario_router.delete('/usuarios', Usuario_Controller.deletar); //verificar_login
+usuario_router.delete('/usuarios', verificar_login, Usuario_Controller.deletar); 
 
 export default usuario_router;
 

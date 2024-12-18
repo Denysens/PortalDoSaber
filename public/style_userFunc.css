@@ -1,0 +1,297 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Body */
+body {
+    background-image: url("/public/img/fundo.png");
+    color: #333;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== NAVBAR ===== */
+#nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #c0f0f7; /* Azul */
+    padding: 10px 20px;
+    color: white;
+    position: relative;
+}
+
+#title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 auto;
+    color: #227e8f;
+}
+
+#principal span {
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px 10px;
+    background-color: #227e8f;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#principal span:hover {
+    background-color: #227e8f;
+}
+
+/* ===== MENU OCULTO ===== */
+/* ===== MENU OCULTO ===== */
+/*estiliza o tamanho, cor e posição*/
+.menu_oculto{
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #add1d6;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.menu_oculto a{
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color:#107faa ;
+    display: block;
+    transition: 0.5s;
+}
+
+/*muda a cor ao passar o mouse em cima*/
+.menu_oculto a:hover{
+    color: #fff;
+}
+/*para  o menu se ajudar com o tamanho a tela, responsividade*/
+@media screen and(max-height: 450px){
+    .menu_oculto{padding-top: 15px;}
+    .menu_oculto a{font-size: 18;}
+}
+
+.sub_menu ul{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    list-style-type: none;
+    background-color: #e4f3f5;
+}
+.sub_menu ul li a{
+    color: #043e46;
+    padding: 20px 40px;
+    text-decoration: none;
+    font-size: 20px;
+    display: block;
+    transition: 1s;
+}
+
+
+.menu_drop{
+    position: relative;
+}
+.menu_drop .drop{
+    position: absolute;
+    background-color: #edf5f7;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    transition: 1s;
+}
+.menu_drop .drop a{
+    padding: 20px;
+}
+.menu_drop:hover .drop{
+    height: 285px;
+}
+.btn_fechar {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* ===== BARRA DE PESQUISA ===== */
+form {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.input-caixa input {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    flex: 1;
+}
+
+.pesquisa-button {
+    padding: 10px 20px;
+    background-color: #227e8f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pesquisa-button:hover {
+    background-color: #227e8f;
+}
+
+/* ===== CARDS DOS LIVROS ===== */
+#main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+#cards-livros {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 colunas fixas */
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+#cards-livros div {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#cards-livros div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+#cards-livros button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color:  #c0f0f7;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#cards-livros button:hover {
+    background-color: #c0f0f7;
+}
+
+/* ===== RODAPÉ ===== */
+#rodape {
+    background-color: #333;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+.cadastrar-livro {
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.cadastrar-livro:hover {
+    color: white;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+    #cards-livros {
+        grid-template-columns: repeat(2, 1fr);
+        /* 2 colunas em telas pequenas */
+    }
+
+    #menu_oculto {
+        width: 180px;
+    }
+
+    form {
+        flex-direction: column;
+    }
+
+    #nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #title {
+        margin: 10px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    #cards-livros {
+        grid-template-columns: 1fr;
+        /* 1 coluna em dispositivos muito pequenos */
+    }
+}
+/* ===== CARDS DOS LIVROS ===== */
+#cards-livros {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 colunas fixas */
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+#cards-livros div {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#cards-livros div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+#titulo {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+#botões {
+    margin-top: auto;
+}
+
+#botões button {
+    padding: 10px 15px;
+    background-color: #227e8f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+#botões button:hover {
+    background-color:#227e8f;
+}
