@@ -30,7 +30,7 @@ class livro_model {
         });
         return livros;
     }
-    
+
     //Filtra os livros pela categoria 
     async buscar_por_categoria(id_categoria) {
         const livros = await prisma.livros.findMany({
@@ -42,6 +42,19 @@ class livro_model {
             }
         });
         return livros;
+    }
+    
+    //Pesquisa o livro por id
+    async buscar_por_id(id_livro) {
+        const livro = await prisma.livros.findMany({
+            where: {
+                AND: [
+                    { id_livro: Number(id_livro) },
+                    { ativo: true }
+                ]
+            }
+        })
+        return livro;
     }
 
     //Insere um novo livro

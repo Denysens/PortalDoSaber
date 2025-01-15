@@ -11,32 +11,44 @@ class usuario_controller {
     async autenticar_login(req, res) {
         const cpf = req.body.cpf;
         const senha = req.body.senha;
-
-        if (!cpf || !Number(senha)) {
-            res.json({ message: "Digite todas os dados: login e a senha, para ter o acesso" });
-            return res.redirect("login")
+    
+        // Verificar se CPF e senha foram enviados
+        if (!cpf || !senha) {
+            return res.redirect("/login?error=Campos obrigatórios ausentes");
         }
-
-        const usuario = await usuario_model.buscar_por_cpf(cpf);
-
-        if (!usuario) {
-            return res.redirect("login");
-        }
-        if (senha != usuario.senha) {
-            return res.redirect("login");
-        }
-
-        req.session.cpf = usuario.cpf;
-        req.session.logado = true;
-        req.session.tipo = usuario.tipo;
-
-        if (usuario.tipo == "func") {
-            return res.redirect("home_func");
-
-        } else {
-            return res.redirect("home_comum");
+    
+        try {
+            // Buscar o usuário pelo CPF
+            const usuario = await usuario_model.buscar_por_cpf(cpf);
+    
+            // Verificar se o usuário existe
+            if (!usuario) {
+                return res.redirect("/login?error=Usuário não encontrado");
+            }
+    
+            // Verificar se a senha está correta
+            if (senha != usuario.senha) {
+                return res.redirect("/login?error=Senha incorreta");
+            }
+        
+            // Criar sessão do usuário
+            req.session.cpf = usuario.cpf;
+            req.session.logado = true;
+            req.session.tipo = usuario.tipo;
+    
+            // Redirecionar conforme o tipo de usuário
+            if (usuario.tipo === "func") {
+                return res.redirect("/home_func");
+            } else {
+                return res.redirect("/home_comum");
+            }
+        } catch (error) {
+            // Se ocorrer algum erro, logue e envie uma resposta 500
+            console.error("Erro ao autenticar login:", error);
+            return res.status(500).json({ message: "Erro interno no servidor." });
         }
     }
+    
 
     //Direcionar para a página de usuário comum
     async home_comum(req, res) {
@@ -107,7 +119,7 @@ class usuario_controller {
         }
 
     }
-    
+
     //Atualizar dados do usuario ativo
     async atualizar_usuario(req, res) {
         const cpf = req.body.cpf;
