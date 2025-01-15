@@ -1,0 +1,57 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Body */
+body {
+    background-image: url("/public/img/fundo.png");
+    color: #333;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#principal {
+    margin-left: 0;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    position: relative;
+    z-index: 1;
+
+   
+}
+
+/* Botões */
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color:rgb(40, 13, 136);
+}
+
+/*para o menu se ajudar com o tamanho a tela, responsividade*/
+@media screen and (max-height: 450px) {
+    .menu_oculto {
+        padding-top: 15px;
+    }
+
+    .menu_oculto a {
+        font-size: 18px;
+    }
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+    #nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
