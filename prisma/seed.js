@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 async function main() {
   const usuario = await prisma.usuarios.create({
     data: {
-      cpf: 12345,
+      cpf: "12345",
       nome: 'Bibliotecário',
       senha: 12345,
       tipo: 'func'
